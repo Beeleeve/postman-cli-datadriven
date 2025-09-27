@@ -61,7 +61,7 @@ jobs:
 
             # 7. Upload HTML reports as artifacts
             - name: Upload Newman HTML reports
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: newman-html-reports
                   path: reports/*.html
