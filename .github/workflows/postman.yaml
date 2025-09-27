@@ -23,14 +23,19 @@ jobs:
 
             # 3. Install Newman
             - name: Install Newman
-              run: npm install -g newman
+              run: |
+                  npm install -g newman
+                  npm install -g newman-reporter-htmlextra
 
             # 4. Run E2E Tests
             - name: Run Grocery Store API E2E Tests
               run: |
                   newman run "collections/Grocery Store API End-to-End Tests.postman_collection.json" \
                     --folder "E2E Tests" \
-                    -e "envs/stage.postman_environment.json"
+                    -e "envs/stage.postman_environment.json" \
+                    --delay-request 200 \
+                    --reporters cli,htmlextra \
+                    --reporter-htmlextra-export reports/e2e-report.html
 
             # 5. Run Data-Driven Product Tests (Products folder only)
             - name: Run Grocery Store API Data-Driven Product Tests (Products folder)
@@ -38,7 +43,10 @@ jobs:
                   newman run "collections/Grocery Store API DataDriven Tests.postman_collection.json" \
                     --folder "Products" \
                     -d "data/products-test-data.json" \
-                    -e "envs/stage.postman_environment.json"
+                    -e "envs/stage.postman_environment.json" \
+                    --delay-request 200 \
+                    --reporters cli,htmlextra \
+                    --reporter-htmlextra-export reports/products-report.html
 
             # 6. Run Full Data-Driven Tests (entire collection)
             - name: Run Grocery Store API Cart Data-Driven Tests
@@ -46,4 +54,14 @@ jobs:
                   newman run "collections/Grocery Store API DataDriven Tests.postman_collection.json" \
                     --folder "Carts" \
                     -d "data/carts-test-data.json" \
-                    -e "envs/stage.postman_environment.json"
+                    -e "envs/stage.postman_environment.json" \
+                    --delay-request 200 \
+                    --reporters cli,htmlextra \
+                    --reporter-htmlextra-export reports/carts-report.html
+
+            # 7. Upload HTML reports as artifacts
+            - name: Upload Newman HTML reports
+              uses: actions/upload-artifact@v3
+              with:
+                  name: newman-html-reports
+                  path: reports/*.html
