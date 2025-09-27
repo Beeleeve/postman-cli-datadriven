@@ -1,0 +1,2425 @@
+{
+	"info": {
+		"_postman_id": "6b9d90be-65b8-458c-8cca-84bd55813603",
+		"name": "Grocery Store API End-to-End Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34570737",
+		"_collection_link": "https://grocerystore-8403.postman.co/workspace/Grocery-Store-API-Tests~785c5fef-517c-4044-934c-627696e7d086/collection/34570737-6b9d90be-65b8-458c-8cca-84bd55813603?action=share&source=collection_link&creator=34570737"
+	},
+	"item": [
+		{
+			"name": "01-Setup-Create Access Token",
+			"item": [
+				{
+					"name": "01-Create new access token",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const email = pm.variables.replaceIn('{{$randomExampleEmail}}');\r",
+									"pm.variables.set(\"randomClientEmail\", email);\r",
+									"const clientName = pm.variables.replaceIn('{{$randomFullName}}');\r",
+									"pm.variables.set(\"randomClientName\", clientName);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201 - Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body contains accessToken\", function () {\r",
+									"    pm.response.to.have.jsonBody(\"accessToken\");\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Access token is not empty\", function () {\r",
+									"    pm.expect(pm.response.json().accessToken).to.not.be.empty;\r",
+									"}); \r",
+									"pm.environment.set(\"accessToken\", pm.response.json().accessToken);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"clientName\": \"{{randomClientName}}\",\r\n   \"clientEmail\": \"{{randomClientEmail}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api-clients",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api-clients"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "sample",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"clientName\": \"Postman on Valentin's computer\",\r\n   \"clientEmail\": \"{{randomClientEmail}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api-clients",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api-clients"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "82"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 22 Sep 2025 19:56:26 GMT"
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-68d1a9e9-6186ee4e1d0a90707416479d;Parent=2238f6bb6655e3ee;Sampled=0;Lineage=1:9dbbed17:0"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "9efcf203-b2d1-49c1-8d0d-14364fc47bd3"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Content-Type,X-Amz-Date,Authorization,X-Api-Key"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "RUd8lGM5oAMEUJw="
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Miss from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 fe3f25790bc50bc3d0e9d4585a26a248.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "LHR50-P6"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "vffoHkIj9pOrcE32YM8d7BNzld9A5jNUR5IyoG_zTNyh33rvlbet8A=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"accessToken\": \"74baf9fda11a2cfd486abdae330cc6b3f063859db4d1449d0bc6c1b992ea0d0f\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "E2E Tests",
+			"item": [
+				{
+					"name": "Get Products",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Defined anyMatch function before usage\r",
+									"function anyMatch(array, predicate) {\r",
+									"    return array.some(predicate);\r",
+									"}\r",
+									"// Return unique values by a key selector\r",
+									"const uniqueValues = (arr, selector) =>\r",
+									"  Array.isArray(arr) ? [...new Set(arr.map(selector))] : [];\r",
+									"\r",
+									"function getAllProductsRespSchema() {\r",
+									"    return {\r",
+									"        type: \"array\",\r",
+									"        items: {\r",
+									"            type: \"object\",\r",
+									"            properties: {\r",
+									"                id: { type: \"integer\" },\r",
+									"                category: { type: \"string\" },\r",
+									"                name: { type: \"string\" },\r",
+									"                inStock: { type: \"boolean\" }\r",
+									"            },\r",
+									"            required: [\"id\", \"category\", \"name\", \"inStock\"]\r",
+									"        }\r",
+									"    };\r",
+									"}\r",
+									"\r",
+									"function uniqueBy(array, key) {\r",
+									"    return [...new Map(array.map(item => [key(item), item])).values()];\r",
+									"}\r",
+									"\r",
+									"function filterBy(array, predicate) {\r",
+									"    return (Array.isArray(array))? array.filter(predicate) :[];\r",
+									"}\r",
+									"\r",
+									"function randomElement(array) {\r",
+									"    return array[Math.floor(Math.random() * array.length)];\r",
+									"}\r",
+									"\r",
+									"const jsonResp = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code matches expected\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 2sec\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains data\", function () {\r",
+									"    pm.expect(jsonResp).to.not.be.empty; \r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response JSON Schema is valid\", function () {\r",
+									"    pm.response.to.have.jsonSchema(getAllProductsRespSchema());\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Find an item with category as Coffee\", function () {\r",
+									"    const coffeeItemFound = anyMatch(jsonResp, item => item.category.toLowerCase() === \"coffee\");\r",
+									"    pm.expect(coffeeItemFound).to.be.true;\r",
+									"});\r",
+									"\r",
+									"const inStockProducts = filterBy(jsonResp, p => p.inStock);\r",
+									"const uniqueCategories = uniqueValues(jsonResp, p => p.category);\r",
+									"const uniqueIds = uniqueValues(inStockProducts, p => p.id);\r",
+									"pm.collectionVariables.set(\"categories\", JSON.stringify(uniqueCategories));\r",
+									"pm.collectionVariables.set(\"randomProductID\", randomElement(uniqueIds));\r",
+									"pm.collectionVariables.set(\"inStockProductIDs\", JSON.stringify(uniqueIds));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/products",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Products",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/products{{requestUrl}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products{{requestUrl}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1725"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 21 Sep 2025 21:26:40 GMT"
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-68d06d90-22e3ca053468bac77d42f515;Parent=516a90c00534ab00;Sampled=0;Lineage=1:9dbbed17:0"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "73e40ded-5f57-4bd9-bc5c-5c3fef9802b4"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Content-Type,X-Amz-Date,Authorization,X-Api-Key"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "RRYOnE5QIAMEZ4w="
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Miss from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 027fb676af23e5e8545e552038c4e1b0.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "LHR50-P6"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "a0dps3iSzW_txWtyTO4HJK5Vn5GahF_6_a-HPaelQs6AD460LywlAw=="
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1225,\n        \"category\": \"fresh-produce\",\n        \"name\": \"1/2 in. Brushless Hammer Drill\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 1709,\n        \"category\": \"meat-seafood\",\n        \"name\": \"Beef Choice Angus Ribeye Steak\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 1710,\n        \"category\": \"meat-seafood\",\n        \"name\": \"Angus Steak Burgers\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 2177,\n        \"category\": \"meat-seafood\",\n        \"name\": \"Cosco Three Step Steel Platform\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 2585,\n        \"category\": \"fresh-produce\",\n        \"name\": \"Green Cabbage Organic\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 3486,\n        \"category\": \"bread-bakery\",\n        \"name\": \"French Bread\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 3674,\n        \"category\": \"fresh-produce\",\n        \"name\": \"20V Max Cordless Drill Combo Kit\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 4641,\n        \"category\": \"coffee\",\n        \"name\": \"Don Francisco Colombia Supremo Medium Roast\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 4643,\n        \"category\": \"coffee\",\n        \"name\": \"Starbucks Coffee Variety Pack, 100% Arabica\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 4646,\n        \"category\": \"coffee\",\n        \"name\": \"Ethical Bean Medium Dark Roast, Espresso\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 4875,\n        \"category\": \"bread-bakery\",\n        \"name\": \"2800 Watt Inverter Generator\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 5477,\n        \"category\": \"dairy\",\n        \"name\": \"Cream Cheese\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 5478,\n        \"category\": \"dairy\",\n        \"name\": \"Low Fat Vanilla Yogurt\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 5499,\n        \"category\": \"bread-bakery\",\n        \"name\": \"Sourdough Bread\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 5774,\n        \"category\": \"candy\",\n        \"name\": \"HERSHEY'S, Milk Chocolate Almond\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 5851,\n        \"category\": \"fresh-produce\",\n        \"name\": \"Cucumber Organic\",\n        \"inStock\": false\n    },\n    {\n        \"id\": 6483,\n        \"category\": \"candy\",\n        \"name\": \"Cadbury Milk Chocolate\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 6543,\n        \"category\": \"bread-bakery\",\n        \"name\": \"Flour Tortillas\",\n        \"inStock\": false\n    },\n    {\n        \"id\": 7395,\n        \"category\": \"meat-seafood\",\n        \"name\": \"Boneless Skinless Chicken Breasts\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 8554,\n        \"category\": \"candy\",\n        \"name\": \"Kinder Joy Eggs\",\n        \"inStock\": true\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get Product by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResp = pm.response.json();\r",
+									"const getProductByIDRespSchema = {\r",
+									"    type: \"object\",\r",
+									"    properties: {\r",
+									"      id: { type: \"number\" },\r",
+									"      category: { type: \"string\" },\r",
+									"      name: { type: \"string\" },\r",
+									"      manufacturer: { type: \"string\" },\r",
+									"      price: { type: \"number\" },\r",
+									"      \"current-stock\": { type: \"number\" },\r",
+									"      inStock: { type: \"boolean\" }\r",
+									"    },\r",
+									"    required: [\"id\", \"category\", \"name\", \"manufacturer\", \"price\", \"current-stock\", \"inStock\"]\r",
+									"  }; // Define the schema variable\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response JSON Schema is valid\", function () {\r",
+									"    pm.response.to.have.jsonSchema(getProductByIDRespSchema);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 2s\", function () {   \r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body contains correct product details\", function () {\r",
+									"    pm.expect(jsonResp.id).to.equal(pm.variables.get(\"randomProductID\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function randomElement(array) { \r",
+									"    return array[Math.floor(Math.random() * array.length)];\r",
+									"}\r",
+									"const inStockProductIDs = JSON.parse(pm.collectionVariables.get(\"inStockProductIDs\"));\r",
+									"const productId = randomElement(inStockProductIDs);\r",
+									"\r",
+									"pm.variables.set(\"randomProductID\", productId);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/products/:productId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								":productId"
+							],
+							"variable": [
+								{
+									"key": "productId",
+									"value": "{{randomProductID}}"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Product by ID",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/products/:productId",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products",
+										":productId"
+									],
+									"variable": [
+										{
+											"key": "productId",
+											"value": "{{randomProductID}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "151"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 21 Sep 2025 21:26:32 GMT"
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-68d06d88-0c16aaeb1189c8f907387732;Parent=14e900e5c565a601;Sampled=0;Lineage=1:9dbbed17:0"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "9fb7069a-ee6e-42c8-997f-93ddd3733628"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Content-Type,X-Amz-Date,Authorization,X-Api-Key"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "RRYNXEacoAMEkzA="
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Miss from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 027fb676af23e5e8545e552038c4e1b0.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "LHR50-P6"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "HmNEjYwfyuMnr77U4PyBLu8GJN1xBj9S66OfzsfEq3N0VDLHOqG4mw=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 3674,\n    \"category\": \"fresh-produce\",\n    \"name\": \"20V Max Cordless Drill Combo Kit\",\n    \"manufacturer\": \"DEWALT\",\n    \"price\": 10.96,\n    \"current-stock\": 3,\n    \"inStock\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Filter Products",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function randomElement(array) {\r",
+									"    return array[Math.floor(Math.random() * array.length)];\r",
+									"}\r",
+									"const categories = JSON.parse(pm.collectionVariables.get(\"categories\"));\r",
+									"const randomCategory = randomElement(categories);\r",
+									"pm.variables.set(\"randomCategory\", randomCategory);\r",
+									"console.log(randomCategory)"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"function getProductsByCategoryRespSchema() {\r",
+									"  return {\r",
+									"    type: \"array\",\r",
+									"    items: {\r",
+									"      type: \"object\",\r",
+									"      properties: {\r",
+									"        id: { type: \"number\" },\r",
+									"        category: { type: \"string\" },\r",
+									"        name: { type: \"string\" },\r",
+									"        inStock: { type: \"boolean\" }\r",
+									"      },\r",
+									"      required: [\"id\", \"name\", \"category\", \"inStock\"]\r",
+									"    }\r",
+									"  };\r",
+									"}\r",
+									"\r",
+									"const jsonResp = pm.response.json();\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response JSON Schema is valid\", function () {\r",
+									"    pm.response.to.have.jsonSchema(getProductsByCategoryRespSchema());\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response time is less than 2s\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+									"});\r",
+									"\r",
+									"const productsByCategory = jsonResp.map(p => p.category);\r",
+									"const expectedCategory = pm.variables.get(\"randomCategory\");\r",
+									"\r",
+									"// Check that every category matches the expected one\r",
+									"pm.test(\"All products have the same category\", function () {\r",
+									"    pm.expect(productsByCategory.every(c => c === expectedCategory)).to.be.true;\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/products?category={{randomCategory}}&results=5&available=true",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "{{randomCategory}}"
+								},
+								{
+									"key": "results",
+									"value": "5"
+								},
+								{
+									"key": "available",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Filter Products",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/products?category={{randomCategory}}&results=5&available=true",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"products"
+									],
+									"query": [
+										{
+											"key": "category",
+											"value": "{{randomCategory}}"
+										},
+										{
+											"key": "results",
+											"value": "5"
+										},
+										{
+											"key": "available",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "361"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 21 Sep 2025 21:26:24 GMT"
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-68d06d80-257b578d7c9720b958bbcfac;Parent=3ac6d7b090b42710;Sampled=0;Lineage=1:9dbbed17:0"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "d1f2dca0-94f6-4c16-8627-5390a4fa27df"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Content-Type,X-Amz-Date,Authorization,X-Api-Key"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "RRYMFGShIAMEMsg="
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Miss from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 027fb676af23e5e8545e552038c4e1b0.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "LHR50-P6"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "KipyzHrhSwNhMdkqDtAdDcwNec3_MVRFS2RppvAr-nnrw0LPPL6bPQ=="
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1225,\n        \"category\": \"fresh-produce\",\n        \"name\": \"1/2 in. Brushless Hammer Drill\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 2585,\n        \"category\": \"fresh-produce\",\n        \"name\": \"Green Cabbage Organic\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 3674,\n        \"category\": \"fresh-produce\",\n        \"name\": \"20V Max Cordless Drill Combo Kit\",\n        \"inStock\": true\n    },\n    {\n        \"id\": 8739,\n        \"category\": \"fresh-produce\",\n        \"name\": \"Fresh Spinach Organic\",\n        \"inStock\": true\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Create New Cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"function createCartRespSchema() {\r",
+									"  return {\r",
+									"    type: \"object\",\r",
+									"    properties: {\r",
+									"      created: { type: \"boolean\" },\r",
+									"      cartId: { type: \"string\" }\r",
+									"    },\r",
+									"    required: [\"created\", \"cartId\"],\r",
+									"    additionalProperties: false\r",
+									"  };\r",
+									"}\r",
+									"const jsonResp = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response schema is valid\", function () {\r",
+									"     pm.response.to.have.jsonSchema(createCartRespSchema());\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Cart created successfully\", function () {  \r",
+									"    pm.expect(jsonResp.created).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Cart ID is returned\", function () {\r",
+									"    pm.expect(jsonResp.cartId).to.be.a('string');\r",
+									"});\r",
+									"pm.collectionVariables.set(\"cartID\", jsonResp.cartId);\r",
+									"pm.collectionVariables.get(\"cartID\");"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/carts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"carts"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create New Cart",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/carts",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"carts"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "49"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 21 Sep 2025 21:26:52 GMT"
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-68d06d9c-32d6674558e33e9741db8a36;Parent=503dc422a8b62961;Sampled=0;Lineage=1:9dbbed17:0"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "4f26f3fd-7bff-490d-9234-00619d099e29"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Content-Type,X-Amz-Date,Authorization,X-Api-Key"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "RRYQjFP5oAMEiqA="
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Miss from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 027fb676af23e5e8545e552038c4e1b0.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "LHR50-P6"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "SfuDk3NVuaWW5-Jw_h0unaeQLxnrtRCG_MR7IwHZluVmmvuhqkwV0g=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"created\": true,\n    \"cartId\": \"hJ-y_0LOMSSJV3-4LBSV-\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Add first item to cart",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function randomElement(array) {\r",
+									"    return array[Math.floor(Math.random() * array.length)];\r",
+									"}\r",
+									"\r",
+									"const cartID = pm.collectionVariables.get(\"cartID\");\r",
+									"if(!cartID){\r",
+									"    pm.sendRequest({\r",
+									"            url: pm.variables.replaceIn('{{base_url}}/carts'),\r",
+									"            method: 'POST',\r",
+									"            header: { 'Content-Type': 'application/json' }\r",
+									"        }, function (err, res) {\r",
+									"            if (err) {\r",
+									"                console.error(err);\r",
+									"                return;\r",
+									"            }\r",
+									"            const json = res.json();\r",
+									"            pm.collectionVariables.set(\"cartID\", json.cartId);\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"const inStockIDs = JSON.parse(pm.collectionVariables.get(\"inStockProductIDs\"));\r",
+									"const cartItemIDs = pm.collectionVariables.get(\"cartItemsProductIDs\");;\r",
+									"const IDs = inStockIDs.filter(id => !cartItemIDs.includes(id));\r",
+									"\r",
+									"const randomProduct = randomElement(IDs);\r",
+									"pm.variables.set(\"randomProductID\", randomProduct);\r",
+									"console.log(\"Random product ID chosen is: \" + randomProduct)\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"function addToCartRespSchema() {\r",
+									"  return {\r",
+									"    type: \"object\",\r",
+									"    properties: {\r",
+									"      created: { type: \"boolean\" },\r",
+									"      itemId: { type: \"number\" }\r",
+									"    },\r",
+									"    required: [\"created\", \"itemId\"],\r",
+									"    additionalProperties: false\r",
+									"  };\r",
+									"}\r",
+									"const jsonResp = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201 - Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response schema is valid\", function () {\r",
+									"    pm.response.to.have.jsonSchema(addToCartRespSchema());\r",
+									"})\r",
+									"\r",
+									"let itemIDs =[];\r",
+									"itemIDs.push(jsonResp.itemId);\r",
+									"pm.collectionVariables.set(\"cartItemIDs\", JSON.stringify(itemIDs));\r",
+									"\r",
+									"if (pm.response.code === 201) {\r",
+									"    let used = JSON.parse(pm.collectionVariables.get(\"cartItemsProductIDs\") || \"[]\");\r",
+									"    used.push(pm.variables.get(\"randomProductID\"));\r",
+									"    pm.collectionVariables.set(\"cartItemsProductIDs\", JSON.stringify(used));\r",
+									"    console.log(\"Updated cartItemsProductIDs:\", used);\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"productId\": {{randomProductID}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/carts/:cartId/items",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"carts",
+								":cartId",
+								"items"
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "{{cartID}}"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Add new item to cart",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"productId\": {{randProductID}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/carts/:cartId/items",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"carts",
+										":cartId",
+										"items"
+									],
+									"variable": [
+										{
+											"key": "cartId",
+											"value": "{{cartID}}"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "35"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 21 Sep 2025 06:20:21 GMT"
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-68cf9925-6cebdcbf33a42641282aab7d;Parent=5ba1836ea4193e7d;Sampled=0;Lineage=1:9dbbed17:0"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "b77a93ca-62ac-4113-8cbb-19dd8ecaa609"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Content-Type,X-Amz-Date,Authorization,X-Api-Key"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "RPTd-FRvoAMELYw="
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Miss from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 403878b7454f6fe706d117ca3ebbd716.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "LHR50-P6"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "S7NUS_Pf0TBkOCNZ2kTrVE3zjDukF2Da4oa3v1DiMw_ocT3f-_MqRQ=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"created\": true,\n    \"itemId\": 700221545\n}"
+						}
+					]
+				},
+				{
+					"name": "Add second item to cart",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function randomElement(array) {\r",
+									"    return array[Math.floor(Math.random() * array.length)];\r",
+									"}\r",
+									"const cartID = pm.collectionVariables.get(\"cartID\");\r",
+									"if(!cartID){\r",
+									"    pm.sendRequest({\r",
+									"            url: pm.variables.replaceIn('{{base_url}}/carts'),\r",
+									"            method: 'POST',\r",
+									"            header: { 'Content-Type': 'application/json' }\r",
+									"        }, function (err, res) {\r",
+									"            if (err) {\r",
+									"                console.error(err);\r",
+									"                return;\r",
+									"            }\r",
+									"            const json = res.json();\r",
+									"            pm.collectionVariables.set(\"cartID\", json.cartId);\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"const inStockIDs = JSON.parse(pm.collectionVariables.get(\"inStockProductIDs\"));\r",
+									"const cartItemIDs = JSON.parse(pm.collectionVariables.get(\"cartItemsProductIDs\"));\r",
+									"const IDs = inStockIDs.filter(id => !cartItemIDs.includes(id));\r",
+									"\r",
+									"const randomProduct = randomElement(IDs);\r",
+									"pm.variables.set(\"randomProductID\", randomProduct);\r",
+									"console.log(\"Random product ID chosen is: \" + randomProduct)\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"function addToCartRespSchema() {\r",
+									"  return {\r",
+									"    type: \"object\",\r",
+									"    properties: {\r",
+									"      created: { type: \"boolean\" },\r",
+									"      itemId: { type: \"number\" }\r",
+									"    },\r",
+									"    required: [\"created\", \"itemId\"],\r",
+									"    additionalProperties: false\r",
+									"  };\r",
+									"}\r",
+									"function getRequest(url) {\r",
+									"    return new Promise((resolve, reject) => {\r",
+									"        pm.sendRequest({\r",
+									"            url: pm.variables.replaceIn(url),\r",
+									"            method: \"GET\",\r",
+									"            header: { \"Content-Type\": \"application/json\" }\r",
+									"        }, (err, res) => {\r",
+									"            if (err) reject(err);\r",
+									"            else resolve(res.json());\r",
+									"        });\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"async function getCartItems() {\r",
+									"    const items = await getRequest(\"{{base_url}}/carts/{{cartID}}/items\");\r",
+									"    const productIDs = items.map(p => p.productId);\r",
+									"\r",
+									"    // Store as strings in collection variables\r",
+									"    pm.collectionVariables.set(\"cartItems\", JSON.stringify(items));\r",
+									"    pm.collectionVariables.set(\"cartItemsProductIDs\", JSON.stringify(productIDs));\r",
+									"    return { items, productIDs };\r",
+									"}\r",
+									"getCartItems();\r",
+									"const jsonResp = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201 - Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response schema is valid\", function () {\r",
+									"    pm.response.to.have.jsonSchema(addToCartRespSchema());\r",
+									"})\r",
+									"\r",
+									"let itemIDs =[];\r",
+									"itemIDs.push(jsonResp.itemId);\r",
+									"pm.collectionVariables.set(\"cartItemIDs\", JSON.stringify(itemIDs));\r",
+									"\r",
+									"\r",
+									"if (pm.response.code === 201) {\r",
+									"    let used = JSON.parse(pm.collectionVariables.get(\"cartItemsProductIDs\") || \"[]\");\r",
+									"    used.push(pm.variables.get(\"randomProductID\"));\r",
+									"    pm.collectionVariables.set(\"cartItemsProductIDs\", JSON.stringify(used));\r",
+									"    console.log(\"Updated cartItemsProductIDs:\", used);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"productId\": {{randomProductID}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/carts/:cartId/items",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"carts",
+								":cartId",
+								"items"
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "{{cartID}}"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Add new item to cart",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"productId\": {{randProductID}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/carts/:cartId/items",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"carts",
+										":cartId",
+										"items"
+									],
+									"variable": [
+										{
+											"key": "cartId",
+											"value": "{{cartID}}"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "35"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 21 Sep 2025 06:20:21 GMT"
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-68cf9925-6cebdcbf33a42641282aab7d;Parent=5ba1836ea4193e7d;Sampled=0;Lineage=1:9dbbed17:0"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "b77a93ca-62ac-4113-8cbb-19dd8ecaa609"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Content-Type,X-Amz-Date,Authorization,X-Api-Key"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "RPTd-FRvoAMELYw="
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Miss from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 403878b7454f6fe706d117ca3ebbd716.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "LHR50-P6"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "S7NUS_Pf0TBkOCNZ2kTrVE3zjDukF2Da4oa3v1DiMw_ocT3f-_MqRQ=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"created\": true,\n    \"itemId\": 700221545\n}"
+						}
+					]
+				},
+				{
+					"name": "Add third item to cart",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function randomElement(array) {\r",
+									"    return array[Math.floor(Math.random() * array.length)];\r",
+									"}\r",
+									"\r",
+									"const cartID = pm.collectionVariables.get(\"cartID\");\r",
+									"if(!cartID){\r",
+									"    pm.sendRequest({\r",
+									"            url: pm.variables.replaceIn('{{base_url}}/carts'),\r",
+									"            method: 'POST',\r",
+									"            header: { 'Content-Type': 'application/json' }\r",
+									"        }, function (err, res) {\r",
+									"            if (err) {\r",
+									"                console.error(err);\r",
+									"                return;\r",
+									"            }\r",
+									"            const json = res.json();\r",
+									"            pm.collectionVariables.set(\"cartID\", json.cartId);\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"const inStockIDs = JSON.parse(pm.collectionVariables.get(\"inStockProductIDs\"));\r",
+									"const cartItemIDs = pm.collectionVariables.get(\"cartItemsProductIDs\");;\r",
+									"const IDs = inStockIDs.filter(id => !cartItemIDs.includes(id));\r",
+									"\r",
+									"const randomProduct = randomElement(IDs);\r",
+									"pm.variables.set(\"randomProductID\", randomProduct);\r",
+									"console.log(\"Random product ID chosen is: \" + randomProduct)\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"function addToCartRespSchema() {\r",
+									"  return {\r",
+									"    type: \"object\",\r",
+									"    properties: {\r",
+									"      created: { type: \"boolean\" },\r",
+									"      itemId: { type: \"number\" }\r",
+									"    },\r",
+									"    required: [\"created\", \"itemId\"],\r",
+									"    additionalProperties: false\r",
+									"  };\r",
+									"}\r",
+									"function getRequest(url) {\r",
+									"    return new Promise((resolve, reject) => {\r",
+									"        pm.sendRequest({\r",
+									"            url: pm.variables.replaceIn(url),\r",
+									"            method: \"GET\",\r",
+									"            header: { \"Content-Type\": \"application/json\" }\r",
+									"        }, (err, res) => {\r",
+									"            if (err) reject(err);\r",
+									"            else resolve(res.json());\r",
+									"        });\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"async function getCartItems() {\r",
+									"    const items = await getRequest(\"{{base_url}}/carts/{{cartID}}/items\");\r",
+									"    const productIDs = items.map(p => p.productId);\r",
+									"\r",
+									"    // Store as strings in collection variables\r",
+									"    pm.collectionVariables.set(\"cartItems\", JSON.stringify(items));\r",
+									"    pm.collectionVariables.set(\"cartItemsProductIDs\", JSON.stringify(productIDs));\r",
+									"    return { items, productIDs };\r",
+									"}\r",
+									"getCartItems();\r",
+									"const jsonResp = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 201 - Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response schema is valid\", function () {\r",
+									"    pm.response.to.have.jsonSchema(addToCartRespSchema());\r",
+									"})\r",
+									"\r",
+									"let itemIDs =[];\r",
+									"itemIDs.push(jsonResp.itemId);\r",
+									"pm.collectionVariables.set(\"cartItemIDs\", JSON.stringify(itemIDs));\r",
+									"\r",
+									"if (pm.response.code === 201) {\r",
+									"    let used = JSON.parse(pm.collectionVariables.get(\"cartItemsProductIDs\") || \"[]\");\r",
+									"    used.push(pm.variables.get(\"randomProductID\"));\r",
+									"    pm.collectionVariables.set(\"cartItemsProductIDs\", JSON.stringify(used));\r",
+									"    console.log(\"Updated cartItemsProductIDs:\", used);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"productId\": {{randomProductID}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/carts/:cartId/items",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"carts",
+								":cartId",
+								"items"
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "{{cartID}}"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Add new item to cart",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"productId\": {{randProductID}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/carts/:cartId/items",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"carts",
+										":cartId",
+										"items"
+									],
+									"variable": [
+										{
+											"key": "cartId",
+											"value": "{{cartID}}"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "35"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 21 Sep 2025 06:20:21 GMT"
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-68cf9925-6cebdcbf33a42641282aab7d;Parent=5ba1836ea4193e7d;Sampled=0;Lineage=1:9dbbed17:0"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "b77a93ca-62ac-4113-8cbb-19dd8ecaa609"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Content-Type,X-Amz-Date,Authorization,X-Api-Key"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "RPTd-FRvoAMELYw="
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Miss from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 403878b7454f6fe706d117ca3ebbd716.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "LHR50-P6"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "S7NUS_Pf0TBkOCNZ2kTrVE3zjDukF2Da4oa3v1DiMw_ocT3f-_MqRQ=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"created\": true,\n    \"itemId\": 700221545\n}"
+						}
+					]
+				},
+				{
+					"name": "Modify Cart Item",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function randomElement(array) {\r",
+									"    return array[Math.floor(Math.random() * array.length)];\r",
+									"}\r",
+									"\r",
+									"function getCurrentStock(productId) {\r",
+									"    return new Promise((resolve, reject) => {\r",
+									"        pm.sendRequest({\r",
+									"            url: pm.variables.replaceIn(`{{base_url}}/products/` + productId),\r",
+									"            method: \"GET\",\r",
+									"            header: { \"Content-Type\": \"application/json\" }\r",
+									"        }, (err, res) => {\r",
+									"            if (err) {\r",
+									"                console.error(\"❌ Error fetching product:\", err);\r",
+									"                return reject(err);\r",
+									"            }\r",
+									"\r",
+									"            const product = res.json();\r",
+									"            const stock = product[\"current-stock\"];\r",
+									"\r",
+									"            // Store in variables for reuse\r",
+									"            pm.collectionVariables.set(\"updatedQuantity\", stock);\r",
+									"\r",
+									"            console.log(\"✅ Current stock for product\", productId, \":\", stock);\r",
+									"\r",
+									"            resolve(stock);\r",
+									"        });\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"const randomCartItem = randomElement(JSON.parse(pm.collectionVariables.get(\"cartItems\")));\r",
+									"pm.variables.set(\"inCartProductID\", randomCartItem.productId);\r",
+									"pm.variables.set(\"modifiedCartItem\", randomCartItem.id);\r",
+									"\r",
+									"const cartID = pm.collectionVariables.get(\"cartID\");\r",
+									"    if(cartID) {\r",
+									"           getCurrentStock(randomCartItem.productId);\r",
+									"    }"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"function getRequest(url) {\r",
+									"    return new Promise((resolve, reject) => {\r",
+									"        pm.sendRequest({\r",
+									"            url: pm.variables.replaceIn(url),\r",
+									"            method: \"GET\",\r",
+									"            header: { \"Content-Type\": \"application/json\" }\r",
+									"        }, (err, res) => {\r",
+									"            if (err) reject(err);\r",
+									"            else resolve(res.json());\r",
+									"        });\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"async function getCartItems() {\r",
+									"    const items = await getRequest(\"{{base_url}}/carts/{{cartID}}/items\");\r",
+									"    const productIDs = items.map(p => p.productId);\r",
+									"\r",
+									"    // Store as strings in collection variables\r",
+									"    pm.collectionVariables.set(\"cartItems\", JSON.stringify(items));\r",
+									"    pm.collectionVariables.set(\"cartItemsProductIDs\", JSON.stringify(productIDs));\r",
+									"\r",
+									"    // Retrieve and parse back if needed\r",
+									"    const storedItems = JSON.parse(pm.collectionVariables.get(\"cartItems\"));\r",
+									"    return { items, productIDs };\r",
+									"}\r",
+									"getCartItems();\r",
+									"pm.test(\"Status code is 204, No content\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"quantity\": {{updatedQuantity}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/carts/:cartId/items/:itemId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"carts",
+								":cartId",
+								"items",
+								":itemId"
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "{{cartID}}"
+								},
+								{
+									"key": "itemId",
+									"value": "{{modifiedCartItem}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Replace an item in Cart",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function randomElement(array) {\r",
+									"    return array[Math.floor(Math.random() * array.length)];\r",
+									"}\r",
+									"\r",
+									"function getRequest(url) {\r",
+									"    return new Promise((resolve, reject) => {\r",
+									"        pm.sendRequest({\r",
+									"            url: pm.variables.replaceIn(url),\r",
+									"            method: \"GET\",\r",
+									"            header: { \"Content-Type\": \"application/json\" }\r",
+									"        }, (err, res) => {\r",
+									"            if (err) reject(err);\r",
+									"            else resolve(res.json());\r",
+									"        });\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"async function getCartItems() {\r",
+									"    const items = await getRequest(\"{{base_url}}/carts/{{cartID}}/items\");\r",
+									"    const productIDs = items.map(p => p.productId);\r",
+									"\r",
+									"    // Store as strings in collection variables\r",
+									"    pm.collectionVariables.set(\"cartItems\", JSON.stringify(items));\r",
+									"    pm.collectionVariables.set(\"cartItemsProductIDs\", JSON.stringify(productIDs));\r",
+									"\r",
+									"    return { items, productIDs };\r",
+									"}\r",
+									"\r",
+									"getCartItems();\r",
+									"const inStockIDs = JSON.parse(pm.collectionVariables.get(\"inStockProductIDs\"));\r",
+									"\r",
+									"const cartItems = JSON.parse(pm.collectionVariables.get(\"cartItems\"));\r",
+									"const inCartProductIDs = cartItems.map(p => p.productId);\r",
+									"const notInCartProductIDs = inStockIDs.filter( p => !inCartProductIDs.includes(p) );\r",
+									"const replacementItem = randomElement(cartItems).id;\r",
+									"\r",
+									"pm.variables.set(\"replacedCartItem\", replacementItem);\r",
+									"pm.variables.set(\"replacementProductID\", notInCartProductIDs[0]);\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"function getRequest(url) {\r",
+									"    return new Promise((resolve, reject) => {\r",
+									"        pm.sendRequest({\r",
+									"            url: pm.variables.replaceIn(url),\r",
+									"            method: \"GET\",\r",
+									"            header: { \"Content-Type\": \"application/json\" }\r",
+									"        }, (err, res) => {\r",
+									"            if (err) reject(err);\r",
+									"            else resolve(res.json());\r",
+									"        });\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"async function getCartItems() {\r",
+									"    const items = await getRequest(\"{{base_url}}/carts/{{cartID}}/items\");\r",
+									"    const productIDs = items.map(p => p.productId);\r",
+									"\r",
+									"    // Store as strings in collection variables\r",
+									"    pm.collectionVariables.set(\"cartItems\", JSON.stringify(items));\r",
+									"    pm.collectionVariables.set(\"cartItemsProductIDs\", JSON.stringify(productIDs));\r",
+									"    return { items, productIDs };\r",
+									"}\r",
+									"getCartItems();\r",
+									"pm.test(\"Status code is 204, no content\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"productId\": {{replacementProductID}},\r\n    \"quantity\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/carts/:cartId/items/:itemId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"carts",
+								":cartId",
+								"items",
+								":itemId"
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "{{cartID}}",
+									"type": "string"
+								},
+								{
+									"key": "itemId",
+									"value": "{{replacedCartItem}}",
+									"type": "string"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cart Items",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResp = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const productIDs =  jsonResp.map(p => p.productId);\r",
+									"pm.collectionVariables.set(\"cartItemsProductIDs\", JSON.stringify(productIDs));\r",
+									"const itemIDs =  jsonResp.map(p => p.id);\r",
+									"const expectedItemIDs = JSON.parse(pm.collectionVariables.get(\"cartItemIDs\"));\r",
+									"const expectedProductIDs = JSON.parse(pm.collectionVariables.get(\"cartItemsProductIDs\"));\r",
+									"\r",
+									"pm.test(\"Response body has expected Product IDs\", function () {\r",
+									"    pm.expect(expectedProductIDs).to.deep.equal(productIDs);\r",
+									"});\r",
+									"pm.collectionVariables.set(\"cartItems\", JSON.stringify(jsonResp));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/carts/:cartId/items",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"carts",
+								":cartId",
+								"items"
+							],
+							"variable": [
+								{
+									"key": "cartId",
+									"value": "{{cartID}}"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Cart Items",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/carts/:cartId/items",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"carts",
+										":cartId",
+										"items"
+									],
+									"variable": [
+										{
+											"key": "cartId",
+											"value": "{{cartID}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "142"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 21 Sep 2025 06:20:07 GMT"
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-68cf9917-33a1ebb41c948e447c46eddf;Parent=0c04f78809e7527f;Sampled=0;Lineage=1:9dbbed17:0"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "9e4eb5e2-a30a-43c6-b7de-db2d0fa2cd83"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Content-Type,X-Amz-Date,Authorization,X-Api-Key"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "RPTbwFktIAMEc9A="
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Miss from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 403878b7454f6fe706d117ca3ebbd716.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "LHR50-P6"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "RyNnYxkxdrHVI2v_PwJBUcFo6_YfKw6aacR5PPfItzo0ocLnMndrkQ=="
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"productId\": 5478,\n        \"id\": 323178152,\n        \"quantity\": 1\n    },\n    {\n        \"productId\": 7395,\n        \"id\": 928618429,\n        \"quantity\": 1\n    },\n    {\n        \"productId\": 2177,\n        \"id\": 166434239,\n        \"quantity\": 1\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Create Order",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const email =pm.variables.replaceIn('{{$randomExampleEmail}}')\r",
+									"pm.variables.set(\"randomClientEmail\", email);\r",
+									"\r",
+									"if (pm.environment.get(\"accessToken\") === undefined) {\r",
+									"\r",
+									"    pm.sendRequest({\r",
+									"            url: pm.variables.replaceIn('{{base_url}}/api-clients'),\r",
+									"            method: 'POST',\r",
+									"            header: { 'Content-Type': 'application/json' },\r",
+									"            body: {\r",
+									"                \"clientName\": \"Postman Tester1\",\r",
+									"                \"clientEmail\": \"{{randomClientEmail}}\"\r",
+									"        }, function (err, res) {\r",
+									"            if (err) {\r",
+									"                console.error(err);\r",
+									"                return;\r",
+									"            }\r",
+									"            pm.environment.set(\"accessToken\", res.json().accessToken);\r",
+									"        }\r",
+									"    });\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResp = pm.response.json();\r",
+									"pm.test(\"Status code is 201 - Created\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"Order Created Successfully\", function () {\r",
+									"    pm.expect(jsonResp.created).to.be.true;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Order ID is not empty\", function () {\r",
+									"    pm.expect(jsonResp.orderId).to.not.be.empty;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Order ID is a string\", function () {\r",
+									"    pm.expect(jsonResp.orderId).to.be.a('string');\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"orderId\", jsonResp.orderId);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cartId\": \"{{cartID}}\",\r\n    \"customerName\": \"John Doe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/orders",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Order",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"cartId\": \"{{cartID}}\",\r\n    \"customerName\": \"John Doe\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/orders",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"orders"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "50"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Sep 2025 05:41:59 GMT"
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-68d384a7-334961ff607e0254229a72f4;Parent=06e0291c75cfc4ee;Sampled=0;Lineage=1:9dbbed17:0"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "8eada145-baba-41bd-89fd-8e261c6e977b"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Content-Type,X-Amz-Date,Authorization,X-Api-Key"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "RZGqREMkoAMEYdw="
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Miss from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 6208571a7dbb8796f3e06e3cf84a6ce6.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "LHR50-P6"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "nAFkEcPNKv2mKv5Tu6rKQnRIItYSdTyJtWbMdqftL2_Xfi_JiMQm5Q=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"created\": true,\n    \"orderId\": \"BINO3snFs9fpWIa559Vvi\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get an Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonResp = pm.response.json();\r",
+									"const expectedItems = pm.collectionVariables.get(\"cartItems\");\r",
+									"const actualItems = jsonResp.items;\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Cart items match order items\", function () {\r",
+									"    pm.expect(actualItems).to.eql(JSON.parse(expectedItems));\r",
+									"});\r",
+									"\r",
+									"pm.collectionVariables.set(\"orderDetails\", JSON.stringify(jsonResp))"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/orders/:orderId",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"orders",
+								":orderId"
+							],
+							"variable": [
+								{
+									"key": "orderId",
+									"value": "{{orderId}}"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get an Order",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/orders/:orderId",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"orders",
+										":orderId"
+									],
+									"variable": [
+										{
+											"key": "orderId",
+											"value": "{{orderId}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "257"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Sep 2025 06:41:30 GMT"
+								},
+								{
+									"key": "X-Amzn-Trace-Id",
+									"value": "Root=1-68d3929a-29c2471c5b9826e87d7ef9b7;Parent=3ceecd1a703b035a;Sampled=0;Lineage=1:9dbbed17:0"
+								},
+								{
+									"key": "x-amzn-RequestId",
+									"value": "80bb5dbe-9155-4b04-b6af-508444db26df"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Content-Type,X-Amz-Date,Authorization,X-Api-Key"
+								},
+								{
+									"key": "x-amz-apigw-id",
+									"value": "RZPYKErwIAMEFPw="
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+								},
+								{
+									"key": "X-Cache",
+									"value": "Miss from cloudfront"
+								},
+								{
+									"key": "Via",
+									"value": "1.1 34214b9a4887c1cdb1a08c4e2e17bcfc.cloudfront.net (CloudFront)"
+								},
+								{
+									"key": "X-Amz-Cf-Pop",
+									"value": "LHR50-P6"
+								},
+								{
+									"key": "X-Amz-Cf-Id",
+									"value": "BBDH0t_0r3-G9HkoN5DwWxh5sxLZHDgU5Y3cubCBqA-Fe3BoStMtsQ=="
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"wak9MOocWemxc9SYmdPKR\",\n    \"items\": [\n        {\n            \"productId\": 3674,\n            \"id\": 481117989,\n            \"quantity\": 1\n        },\n        {\n            \"productId\": 1225,\n            \"id\": 165215844,\n            \"quantity\": 2\n        },\n        {\n            \"productId\": 5499,\n            \"id\": 186203300,\n            \"quantity\": 5\n        }\n    ],\n    \"customerName\": \"John Doe\",\n    \"created\": \"2025-09-24T06:35:07.178Z\",\n    \"comment\": \"\"\n}"
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					"// const utils = {\r",
+					"//   uniqueBy: (arr, selector) => Array.isArray(arr) ? [...new Set(arr.map(selector))] : [],\r",
+					"//   filterBy: (arr, predicate) => Array.isArray(arr) ? arr.filter(predicate) : [],\r",
+					"//   anyMatch: (arr, predicate) => Array.isArray(arr) ? arr.some(predicate) : false,\r",
+					"//   includesValue: (arr, value) => Array.isArray(arr) ? arr.includes(value) : false,\r",
+					"//   randomIndex: (arr) => Array.isArray(arr) && arr.length > 0 ? Math.floor(Math.random() * arr.length) : -1,\r",
+					"//   randomElement: (arr) => {\r",
+					"//     const idx = utils.randomIndex(arr);\r",
+					"//     return idx >= 0 ? arr[idx] : undefined;\r",
+					"//   }\r",
+					"// };\r",
+					"\r",
+					"// pm.collectionVariables.set(\"utils\", JSON.stringify(utils, (k,v) =>\r",
+					"//   typeof v === \"function\" ? v.toString() : v\r",
+					"// ));"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "inStockProductIDs",
+			"value": ""
+		},
+		{
+			"key": "cartID",
+			"value": ""
+		},
+		{
+			"key": "itemID",
+			"value": ""
+		},
+		{
+			"key": "cartItemIDs",
+			"value": ""
+		},
+		{
+			"key": "cartItemsProductIDs",
+			"value": ""
+		},
+		{
+			"key": "cartItems",
+			"value": ""
+		},
+		{
+			"key": "categories",
+			"value": ""
+		},
+		{
+			"key": "randomProductID",
+			"value": ""
+		},
+		{
+			"key": "randomCategory",
+			"value": ""
+		},
+		{
+			"key": "updatedQuantity",
+			"value": ""
+		},
+		{
+			"key": "replacedCartItem",
+			"value": ""
+		},
+		{
+			"key": "orderId",
+			"value": ""
+		},
+		{
+			"key": "orderDetails",
+			"value": ""
+		}
+	]
+}

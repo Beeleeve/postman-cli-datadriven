@@ -1,0 +1,81 @@
+[
+  {
+    "name": "Add an item with qty to cart",
+    "body": {
+      "productId": 3674,
+      "quantity": 2
+    },
+    "statusCode": 201,
+    "result": "success"
+  },
+  {
+    "name": "Add an item without qty to cart",
+    "body": {
+      "productId": 4643
+    },
+    "statusCode": 201,
+    "result": "success"
+  },
+  {
+    "name": "Add an item with qty to cart",
+    "body": {
+      "productId": 1225,
+      "quantity": 2
+    },
+    "statusCode": 201,
+    "result": "success"
+  },
+  {
+    "name": "Add an item with qty more than 10 to cart",
+    "body": {
+      "productId": 2585,
+      "quantity": 10
+    },
+    "statusCode": 201,
+    "result": "success"
+  },
+  {
+    "name": "Add item to cart without request body",
+    "body": {},
+    "statusCode": 400,
+    "result": "error",
+    "error": "Invalid or missing productId."
+  },
+  {
+    "name": "Add an item with invalid productId",
+    "body": {
+      "productId": "1234a",
+      "quantity": 2
+    },
+    "statusCode": 400,
+    "result": "error",
+    "error": "Invalid or missing productId."
+  },
+  {
+    "name": "Add an item with invalid quantity - this is bug?",
+    "body": {
+      "productId": 3674,
+      "quantity": 1.5
+    },
+    "statusCode": 201,
+    "result": "success"
+  },
+  {
+    "name": "Add an item with negative quantity - this is bug?",
+    "body": {
+      "productId": 3674,
+      "quantity": -2
+    },
+    "statusCode": 201,
+    "result": "success"
+  },
+  {
+    "name": "Add an item with zero quantity - this is bug?",
+    "body": {
+      "productId": 3674,
+      "quantity": 0
+    },
+    "statusCode": 201,
+    "result": "success"
+  }
+]

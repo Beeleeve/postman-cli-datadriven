@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Get all products",
+    "queryParams": {},
+    "statusCode": 200,
+    "result": "success"
+  },
+  {
+    "name": "Filter by category - coffee, results and inStock",
+    "queryParams": { "category": "coffee", "results": 3, "available": true },
+    "statusCode": 200,
+    "result": "success"
+  },
+  {
+    "name": "Filter by category - fresh-produce",
+    "queryParams": { "category": "fresh-produce" },
+    "statusCode": 200,
+    "result": "success"
+  },
+  {
+    "name": "Filter by invalid category",
+    "queryParams": { "category": "electronics" },
+    "statusCode": 400,
+    "result": "error",
+    "error": "Invalid value for query parameter 'category'. Must be one of: coffee, fresh-produce, meat-seafood, candy, dairy, bread-bakery, eggs"
+  },
+  {
+    "name": "Filter by invalid inStock",
+    "queryParams": { "category": "dairy", "available": "yes" },
+    "statusCode": 400,
+    "result": "error",
+    "error": "Invalid value for query parameter 'available'. Must be one of: true, false"
+  }
+]
